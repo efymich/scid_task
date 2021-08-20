@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: URL tokenizator
+  description: URL tokenizator API
+  version: 1.0.0
+tags:
+  - name: basic
+    description: "API для формирования короткого URL"
+
+paths:
+  /addUrl:
+    put:
+      tags:
+        - basic
+      description: "Добавление исходной ссылки в БД"
+      responses:
+        200:
+          description: "Ссылка добавлена!"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/AnyDict"
+                  - $ref: "#/components/schemas/AnyValue"
+
+  /{token}:
+    get:
+      tags:
+        - basic
+      description: "Перенаправление по новой ссылке"
+      responses:
+        302:
+          description: "Перенаправление успешно!"
+          headers:
+            Location:
+              schema:
+                type: string
+                description: "Заголовок для перенаправления по старому URL"
+                format: "protocol://host/path"
+        404:
+          $ref: "#/components/responses/Error"
+        500:
+          $ref: "#/components/responses/Error"
+
+components:
+  responses:
+    Error:
+      description: ""
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: ""
+                example: ""
+              description:
+                type: string
+                description: ""
+
+  parameters:
+    token:
+      name: token
+      in: path
+      description: "Id короткой ссылки"
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    AnyDict:
+      type: object
+      additionalProperties:
+        type: string
+      example:
+        message: "query is OK"
+        newUrl: "17a3c2b8"
+    AnyValue:
+      type: object
+      description: "wrapper"
+      properties:
+        data:
+          nullable: true
+          anyOf:
+            - type: array
+            - type: string
+            - type: object
+    href:
+      type: string
+      description: "Исходная ссылка"
+      example: ""
+    customToken:
+      type: string
+      description: "Человекочитабельная ссылка"
+      example: "cat"
+      maximum: 10
