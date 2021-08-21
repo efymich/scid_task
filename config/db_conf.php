@@ -3,6 +3,6 @@ return [
     'host' => 'localhost',
     'user' => 'admin',
     'password' => '1234',
-    'database' => 'profi_task',
+    'database' => 'scid_test',
     'port' => 3306
 ];

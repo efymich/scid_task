@@ -3,6 +3,7 @@ return [
     'host' => 'localhost',
     'user' => 'admin',
     'password' => '1234',
-    'database' => 'profi_task',
-    'dir' => "/home/efymich/profi_task/migration_module/migrations/"
+    'database' => 'scid_test',
+    'port' => 3306,
+    'dir' => "./migrations/",
 ];
