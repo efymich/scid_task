@@ -10,21 +10,11 @@ use core\Response\InfoResponse;
 class AuthorController
 {
     public function index(array $data) {
-
-        if (!empty($data['page']) && !isset($data['perPage'])) {
-            $page = (int)$data['page'];
-            $response = AuthorRepo::index($page);
-            return new InfoResponse($response);
-        }
-        if (!empty($data['page']) && !empty($data['perPage'])) {
-            $page = (int)$data['page'];
-            $perPage = (int)$data['perPage'];
-            $response = AuthorRepo::index($page,$perPage);
-            return new InfoResponse($response);
-        }
+        $page = (int)$data['page'] ?? null;
+        $perPage = (int)$data['perPage'] ?? null;
 
         if (!databaseErrors()) {
-            $response = AuthorRepo::index();
+            $response = AuthorRepo::index($page,$perPage);
             return new InfoResponse($response);
         }
         return new ErrorResponse(500,"database index error");
@@ -34,7 +24,7 @@ class AuthorController
         $jsonArr = json_decode(file_get_contents('php://input'), true);
 
         if ($jsonArr === null) {
-            return new ErrorResponse(500, "Invalid input JSON");
+            return new ErrorResponse(400, "Invalid input JSON");
         }
 
         if (!$this->validateAddAuthor($jsonArr)) {
@@ -52,7 +42,7 @@ class AuthorController
         $jsonArr = json_decode(file_get_contents('php://input'), true);
 
         if ($jsonArr === null) {
-            return new ErrorResponse(500, "Invalid input JSON");
+            return new ErrorResponse(400, "Invalid input JSON");
         }
 
         if (!$this->validateUpdateAuthor($jsonArr)) {
@@ -80,10 +70,10 @@ class AuthorController
         $jsonArr = json_decode(file_get_contents('php://input'), true);
 
         if ($jsonArr === null) {
-            return new ErrorResponse(500, "Invalid input JSON");
+            return new ErrorResponse(400, "Invalid input JSON");
         }
         if (empty($jsonArr['id'])) {
-            return new ErrorResponse(400, "Invalid input JSON");
+            return new ErrorResponse(400, "JSON is not validate");
         }
         $id = (int)$jsonArr['id'];
 
@@ -112,7 +102,7 @@ class AuthorController
         if (isset($jsonArr['first_name']) && is_null($jsonArr['first_name'])) {
             return false;
         }
-        if (isset($jsonArr['last_name']) && preg_match("/(\w{3,20})/", $jsonArr['last_name']) === false) {
+        if (isset($jsonArr['last_name']) && !preg_match("/(\w{3,20})/", $jsonArr['last_name'])) {
             return false;
         }
         if (!isset($jsonArr['last_name']) && !isset($jsonArr['first_name'])) {

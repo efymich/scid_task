@@ -10,7 +10,7 @@ class Magazine
     public int $author_id;
     public string $created_at;
 
-    public function __construct(string $name,string $image,int $author_id,string $created_at,string $description = '')
+    public function __construct(string $name,string $description,string $image,int $author_id,string $created_at)
     {
         $this->name = $name;
         $this->description = $description;

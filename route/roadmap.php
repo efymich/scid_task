@@ -18,7 +18,13 @@ Route::Post("/author/delete", app\Controllers\AuthorController::class, 'delete')
 
 // Magazine methods
 
-Route::Get("/magazine/list/{page}/{perPage}/{author_id}", app\Controllers\MagazineController::class, 'index');
+Route::Get("/magazine/list", app\Controllers\MagazineController::class, 'index');
+
+Route::Get("/magazine/list/{author_id}", app\Controllers\MagazineController::class, 'index');
+
+Route::Get("/magazine/list/{author_id}/{page}", app\Controllers\MagazineController::class, 'index');
+
+Route::Get("/magazine/list/{author_id}/{page}/{perPage}", app\Controllers\MagazineController::class, 'index');
 
 Route::Post("/magazine/add", app\Controllers\MagazineController::class, 'add');
 
