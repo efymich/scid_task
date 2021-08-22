@@ -1,18 +1,151 @@
 openapi: 3.0.3
 info:
-  title: URL tokenizator
-  description: URL tokenizator API
+  title: List of journals and authors
+  description: Listing API JSON
   version: 1.0.0
 tags:
-  - name: basic
-    description: "API для формирования короткого URL"
+  - name: authors
+    description: "методы для работы с сущностью Автор"
+  - name: magazines
+    description: "методы для работы с сущностью Журнал"
 
 paths:
-  /addUrl:
-    put:
+  /author/list:
+    get:
       tags:
-        - basic
+        - authors
+      description: "Отображение списка авторов"
+      responses:
+        200:
+          description: "Запрос выполнен!"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  last_name:
+                    $ref: "#/components/schemas/last_name"
+                  first_name:
+                    $ref: "#/components/schemas/first_name"
+                  middle_name:
+                    $ref: "#/components/schemas/middle_name"
+        400:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+        500:
+          $ref: "#/components/responses/Error"
+
+  /author/list/{page}:
+    parameters:
+      - $ref: "#/components/parameters/page"
+    get:
+      tags:
+        - authors
+      description: "Отображение списка авторов"
+      responses:
+        200:
+          description: "Запрос выполнен!"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  last_name:
+                    $ref: "#/components/schemas/last_name"
+                  first_name:
+                    $ref: "#/components/schemas/first_name"
+                  middle_name:
+                    $ref: "#/components/schemas/middle_name"
+        400:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+        500:
+          $ref: "#/components/responses/Error"
+
+  /author/list/{page}/{perPage}:
+    parameters:
+      - $ref: "#/components/parameters/page"
+      - $ref: "#/components/parameters/perPage"
+    get:
+      tags:
+        - authors
+      description: "Отображение списка авторов"
+      responses:
+        200:
+          description: "Запрос выполнен!"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  last_name:
+                    $ref: "#/components/schemas/last_name"
+                  first_name:
+                    $ref: "#/components/schemas/first_name"
+                  middle_name:
+                    $ref: "#/components/schemas/middle_name"
+        400:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+        500:
+          $ref: "#/components/responses/Error"
+
+  /author/add:
+    post:
+      tags:
+        - authors
       description: "Добавление исходной ссылки в БД"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - last_name
+                - first_name
+              properties:
+                last_name:
+                  $ref: "#/components/schemas/last_name"
+                first_name:
+                  $ref: "#/components/schemas/first_name"
+                middle_name:
+                  $ref: "#/components/schemas/middle_name"
+      responses:
+        200:
+          description: "Запрос выполнен!"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/AnyDict"
+                  - $ref: "#/components/schemas/AnyValue"
+        400:
+          $ref: "#/components/responses/Error"
+
+  /author/update:
+    post:
+      tags:
+        - authors
+      description: "Добавление исходной ссылки в БД"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  $ref: "#/components/schemas/id"
+                last_name:
+                  $ref: "#/components/schemas/last_name"
+                first_name:
+                  $ref: "#/components/schemas/first_name"
+                middle_name:
+                  $ref: "#/components/schemas/middle_name"
       responses:
         200:
           description: "Ссылка добавлена!"
@@ -22,25 +155,299 @@ paths:
                 oneOf:
                   - $ref: "#/components/schemas/AnyDict"
                   - $ref: "#/components/schemas/AnyValue"
+        400:
+          $ref: "#/components/responses/Error"
 
-  /{token}:
+  /author/delete:
+    post:
+      tags:
+        - authors
+      description: "Добавление исходной ссылки в БД"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  $ref: "#/components/schemas/id"
+                last_name:
+                  $ref: "#/components/schemas/last_name"
+                first_name:
+                  $ref: "#/components/schemas/first_name"
+                middle_name:
+                  $ref: "#/components/schemas/middle_name"
+      responses:
+        200:
+          description: "Ссылка добавлена!"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/AnyDict"
+                  - $ref: "#/components/schemas/AnyValue"
+        400:
+          $ref: "#/components/responses/Error"
+
+  /magazine/list:
     get:
       tags:
-        - basic
-      description: "Перенаправление по новой ссылке"
+        - magazines
+      description: "Отображение списка авторов"
       responses:
-        302:
-          description: "Перенаправление успешно!"
-          headers:
-            Location:
+        200:
+          description: "Запрос выполнен!"
+          content:
+            application/json:
               schema:
-                type: string
-                description: "Заголовок для перенаправления по старому URL"
-                format: "protocol://host/path"
+                type: object
+                properties:
+                  id:
+                    $ref: "#/components/schemas/id"
+                  name:
+                    $ref: "#/components/schemas/name"
+                  description:
+                    $ref: "#/components/schemas/description"
+                  image:
+                    $ref: "#/components/schemas/image"
+                  author_id:
+                    $ref: "#/components/parameters/author_id"
+                  created_at:
+                    $ref: "#/components/schemas/created_at"
+        400:
+          $ref: "#/components/responses/Error"
         404:
           $ref: "#/components/responses/Error"
         500:
           $ref: "#/components/responses/Error"
+
+  /magazine/list/{author_id}:
+    parameters:
+      - $ref: "#/components/parameters/author_id"
+    get:
+      tags:
+        - magazines
+      description: "Отображение списка авторов"
+      responses:
+        200:
+          description: "Запрос выполнен!"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: "#/components/schemas/id"
+                  name:
+                    $ref: "#/components/schemas/name"
+                  description:
+                    $ref: "#/components/schemas/description"
+                  image:
+                    $ref: "#/components/schemas/image"
+                  author_id:
+                    $ref: "#/components/parameters/author_id"
+                  created_at:
+                    $ref: "#/components/schemas/created_at"
+        400:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+        500:
+          $ref: "#/components/responses/Error"
+
+  /magazine/list/{author_id}/{page}:
+    parameters:
+      - $ref: "#/components/parameters/author_id"
+      - $ref: "#/components/parameters/page"
+    get:
+      tags:
+        - magazines
+      description: "Отображение списка авторов"
+      responses:
+        200:
+          description: "Запрос выполнен!"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: "#/components/schemas/id"
+                  name:
+                    $ref: "#/components/schemas/name"
+                  description:
+                    $ref: "#/components/schemas/description"
+                  image:
+                    $ref: "#/components/schemas/image"
+                  author_id:
+                    $ref: "#/components/parameters/author_id"
+                  created_at:
+                    $ref: "#/components/schemas/created_at"
+        400:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+        500:
+          $ref: "#/components/responses/Error"
+
+  /magazine/list/{author_id}/{page}/{perPage}:
+    parameters:
+      - $ref: "#/components/parameters/author_id"
+      - $ref: "#/components/parameters/page"
+      - $ref: "#/components/parameters/perPage"
+    get:
+      tags:
+        - magazines
+      description: "Отображение списка авторов"
+      responses:
+        200:
+          description: "Запрос выполнен!"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    $ref: "#/components/schemas/id"
+                  name:
+                    $ref: "#/components/schemas/name"
+                  description:
+                    $ref: "#/components/schemas/description"
+                  image:
+                    $ref: "#/components/schemas/image"
+                  author_id:
+                    $ref: "#/components/parameters/author_id"
+                  created_at:
+                    $ref: "#/components/schemas/created_at"
+        400:
+          $ref: "#/components/responses/Error"
+        404:
+          $ref: "#/components/responses/Error"
+        500:
+          $ref: "#/components/responses/Error"
+
+  /magazine/add:
+    post:
+      tags:
+        - magazines
+      description: "Добавление исходной ссылки в БД"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - author_id
+              properties:
+                name:
+                  $ref: "#/components/schemas/name"
+                description:
+                  $ref: "#/components/schemas/description"
+                image:
+                  type: string
+                  format: binary
+                author_id:
+                  $ref: "#/components/parameters/author_id"
+                created_at:
+                  $ref: "#/components/schemas/created_at"
+            encoding:
+              image:
+                contentType: image/jpeg, image/png
+      responses:
+        200:
+          description: "Ссылка добавлена!"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/AnyDict"
+                  - $ref: "#/components/schemas/AnyValue"
+        400:
+          $ref: "#/components/responses/Error"
+
+
+  /magazine/update:
+    post:
+      tags:
+        - magazines
+      description: "Добавление исходной ссылки в БД"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                name:
+                  $ref: "#/components/schemas/name"
+                description:
+                  $ref: "#/components/schemas/description"
+                image:
+                  type: string
+                  format: binary
+                author_id:
+                  $ref: "#/components/parameters/author_id"
+                created_at:
+                  $ref: "#/components/schemas/created_at"
+            encoding:
+              image:
+                contentType: image/jpeg, image/png
+      responses:
+        200:
+          description: "Ссылка добавлена!"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/AnyDict"
+                  - $ref: "#/components/schemas/AnyValue"
+        400:
+          $ref: "#/components/responses/Error"
+
+
+  /magazine/delete:
+    post:
+      tags:
+        - magazines
+      description: "Добавление исходной ссылки в БД"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                name:
+                  $ref: "#/components/schemas/name"
+                description:
+                  $ref: "#/components/schemas/description"
+                image:
+                  type: string
+                  format: binary
+                author_id:
+                  $ref: "#/components/parameters/author_id"
+                created_at:
+                  $ref: "#/components/schemas/created_at"
+            encoding:
+              image:
+                contentType: image/jpeg, image/png
+      responses:
+        200:
+          description: "Ссылка добавлена!"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/AnyDict"
+                  - $ref: "#/components/schemas/AnyValue"
+        400:
+          $ref: "#/components/responses/Error"
+
 
 components:
   responses:
@@ -60,13 +467,27 @@ components:
                 description: ""
 
   parameters:
-    token:
-      name: token
+    author_id:
+      name: author_id
       in: path
-      description: "Id короткой ссылки"
-      required: true
+      description: "Id автора"
+      required: false
       schema:
-        type: string
+        type: integer
+    page:
+      name: page
+      in: path
+      description: "Номер показываемой страницы"
+      required: false
+      schema:
+        type: integer
+    perPage:
+      name: perPage
+      in: path
+      description: "Количество показываемых записей на странице"
+      required: false
+      schema:
+        type: integer
 
   schemas:
     AnyDict:
@@ -75,7 +496,6 @@ components:
         type: string
       example:
         message: "query is OK"
-        newUrl: "17a3c2b8"
     AnyValue:
       type: object
       description: "wrapper"
@@ -86,12 +506,50 @@ components:
             - type: array
             - type: string
             - type: object
-    href:
+    id:
+      type: integer
+      description: "ID записи"
+      example: 1
+
+    last_name:
       type: string
-      description: "Исходная ссылка"
+      description: "Фамилия автора"
+      example: "Иванов"
+      minLength: 3
+
+    first_name:
+      type: string
+      description: "Имя автора"
+      example: "Иван"
+
+    middle_name:
+      type: string
+      description: "Отчество автора"
+      example: "Иванович"
+
+
+    name:
+      type: string
+      description: "Название журнала"
+      example: "Economic"
+
+    description:
+      type: string
+      description: "Краткое содержание"
       example: ""
-    customToken:
+
+    image:
       type: string
-      description: "Человекочитабельная ссылка"
-      example: "cat"
-      maximum: 10
+      description: "Ссылка на картинку"
+      example: "image/"
+
+    author_id:
+      type: integer
+      description: "ID автора"
+      example: 1
+
+    created_at:
+      type: string
+      description: "Дата выпуска журнала"
+      format: "YYYY-MM-DD"
+      example: "2020-01-01"

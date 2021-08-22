@@ -55,9 +55,16 @@ class MagazineController
         if (!$this->validateUpdateMagazine($arr)) {
             return new ErrorResponse(400, "JSON is not validate");
         }
-
         $values = [];
         $fields = [];
+
+        if (!empty($this->UploadImage())) {
+            $image = "images/" . $this->UploadImage();
+            $fields[0] = "image = ? ";
+            $values[0] = $image;
+        }
+
+
         foreach ($arr as $key =>$val) {
             if ($key === 'id') {
                 $id = (int)$val;
@@ -66,6 +73,7 @@ class MagazineController
             $fields[] = $key . " = ? ";
             $values[] = $val;
         }
+
         $fields = implode(',',$fields);
 
         $response = MagazineRepo::update($fields,$values,$id);
