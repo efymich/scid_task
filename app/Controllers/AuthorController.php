@@ -10,8 +10,8 @@ use core\Response\InfoResponse;
 class AuthorController
 {
     public function index(array $data) {
-        $page = (int)$data['page'] ?? null;
-        $perPage = (int)$data['perPage'] ?? null;
+        $page = $data['page'] ?? null;
+        $perPage = $data['perPage'] ?? null;
 
         if (!databaseErrors()) {
             $response = AuthorRepo::index($page,$perPage);

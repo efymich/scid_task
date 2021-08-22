@@ -10,9 +10,9 @@ use core\Response\InfoResponse;
 class MagazineController
 {
     public function index(array $data) {
-        $page = (int)$data['page'] ?? null;
-        $perPage = (int)$data['perPage'] ?? null;
-        $author_id = (int)$data['author_id'] ?? null;
+        $page = $data['page'] ?? null;
+        $perPage = $data['perPage'] ?? null;
+        $author_id = $data['author_id'] ?? null;
 
         if (!databaseErrors()) {
             $response = MagazineRepo::index($author_id,$page,$perPage);
